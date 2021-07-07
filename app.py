@@ -4,16 +4,15 @@ from models import Notification
 
 app = Flask(__name__)
 
-app.config['MONGODB_SETTINGS'] ={'host': 'mongodb://localhost/db'}
-
+app.config['MONGODB_SETTINGS'] ={'host': 'mongodb://mongodb/db', 'port':27017}
 initialize_db(app)
 
-@app.route('/')
-def send_notification():
-    objs = Notification.objects.to_json()
-    return objs
+@app.route('/notifications')
+def list_notification():
+    data = Notification.objects.all().to_json()
+    return data
 
-@app.route('/send')
-def send_notification():
-    obj = Notification.objects.to_json()
-    return obj
+@app.route('/notifications/:id')
+def list_notification():
+    data = Notification.objects.filter(id=id).to_json()
+    return data
