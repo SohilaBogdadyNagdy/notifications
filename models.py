@@ -1,4 +1,3 @@
-from typing_extensions import Required
 from db import db
 
 class Notification(db.Document):
