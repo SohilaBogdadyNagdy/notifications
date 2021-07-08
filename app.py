@@ -13,6 +13,6 @@ def list_notification():
     return data
 
 @app.route('/notifications/:id')
-def list_notification():
+def get_notification():
     data = Notification.objects.filter(id=id).to_json()
     return data
