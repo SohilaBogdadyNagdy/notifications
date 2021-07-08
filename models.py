@@ -1,9 +1,10 @@
+from flask.app import Flask
 from db import db
 
 class Notification(db.Document):
     type = db.StringField(required=True, unique=True)
     message = db.StringField(required=True, unique=True)
-    createdAt = db.DateField(required=True)
+    createdAt = db.DateField()
 
 class User(db.Document):
     name = db.StringField(required=True)
