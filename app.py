@@ -2,7 +2,7 @@ import json
 from flask import Flask, request, jsonify
 
 from db import initialize_db
-from models import Notification, User
+from models import Notification, User, NotificationLog
 
 app = Flask(__name__)
 
@@ -14,8 +14,8 @@ def list_notification():
     data = Notification.objects.all().to_json()
     return jsonify({'data': data}), 200 
 
-@app.route('/notifications/:id')
-def get_notification():
+@app.route('/notifications/<id>')
+def get_notification(id):
     data = Notification.objects.filter(id=id).to_json()
     return jsonify({'data': data}), 200
 
@@ -41,10 +41,22 @@ def post_user():
         return e.message, 400
 
 
-@app.route('/send/:notificationId', methods=['POST'])
-def send():
+@app.route('/send/<id>', methods=['POST'])
+def send(id):
     try:
         userIds = json.loads(request.data)
+        notification = Notification.objects.filter(id=id).to_json()
+        if not notification:
+            return jsonify({
+            "message": "BAD REQUEST",
+            "success": False
+        }), 400
+        ### Call Send Notification ###
+        log = {
+            "notificationId": id,
+            "userIds": userIds
+        }
+        NotificationLog(**log).save()
         return jsonify({
             "message": "Send Successfully",
             "success": True
