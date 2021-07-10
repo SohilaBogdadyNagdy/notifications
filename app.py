@@ -1,6 +1,7 @@
 import json
 from flask_swagger import swagger
 from flask import Flask, request, jsonify
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from db import initialize_db
 from models import Notification, User, NotificationLog
@@ -9,6 +10,18 @@ app = Flask(__name__)
 
 app.config['MONGODB_SETTINGS'] ={'host': 'mongo', 'port':27017}
 initialize_db(app)
+
+
+### swagger specific ###
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={'app_name': "Notification"}
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+    ### end swagger specific ###
 
 @app.route("/spec")
 def spec():
@@ -29,7 +42,7 @@ def get_notification(id):
     data = Notification.objects.filter(id=id).to_json()
     return jsonify({'data': data}), 200
 
-@app.route('/notification', methods=['POST'])
+@app.route('/notifications', methods=['POST'])
 def post_notification():
     """
         Create a new notification
@@ -119,7 +132,7 @@ def post_user():
         return e.message, 400
 
 
-@app.route('/send/<id>', methods=['POST'])
+@app.route('/notification/send/<id>', methods=['POST'])
 def send(id):
     """
         Send a new notification

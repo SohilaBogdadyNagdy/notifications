@@ -1,0 +1,228 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "description": "Flask-Python",
+      "version": "1.0.0",
+      "title": "notification-app",
+      "contact": {
+        "email": "sohila.bogdady2012@gmail.com"
+      },
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "servers": [
+    ],
+    "tags": [
+      {
+        "name": "User",
+        "description": "API for user"
+      },
+      {
+        "name": "Notification",
+        "description": "API for notification"
+      } 
+    ],
+    "paths": {
+      "/user": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Create a new user",
+          "requestBody": {
+            "description": "Signup",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/userPostBody"
+                }
+              }
+            }
+          },
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/id"
+              }
+            },
+            "400": {
+              "description": "Failed. Bad post data."
+            }
+          }
+        }
+      },
+      "/notifications": {
+        "post": {
+          "tags": [
+            "Notification"
+          ],
+          "summary": "New Notification",
+          "requestBody": {
+            "description": "new-notification",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/notification"
+                }
+              }
+            }
+          },
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/id"
+              }
+            },
+            "400": {
+              "description": "Failed. Bad post data."
+            }
+          }
+        },
+        "get": {
+            "tags": [
+              "Notification"
+            ],
+            "summary": "Get all Notification",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "example": {
+                  "message": "Test",
+                  "type": "SMS"
+              }
+              },
+              "400": {
+                "description": "Failed. Bad post data."
+              }
+            }
+          }
+      },
+      "/notifications/<id>": {
+        "get": {
+          "tags": [
+            "Notification"
+          ],
+          "summary": "Get one Notification",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "example": {
+                "message": "Test",
+                "type": "SMS"
+            }
+            },
+            "400": {
+              "description": "Failed. Bad post data."
+            }
+          }
+        }
+      },
+      "/notifications/send/<id>": {
+        "post": {
+          "tags": [
+            "Notification"
+          ],
+          "summary": "Send Notification",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "string"
+            }
+          ],
+          "requestBody": {
+            "description": "send-notification",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/sendNotification"
+                }
+              }
+            }
+          },
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/id"
+              }
+            },
+            "400": {
+              "description": "Failed. Bad post data."
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "id": {
+          "properties": {
+            "uuid": {
+              "type": "string"
+            }
+          }
+        },
+        "userPostBody": {
+          "type": "object",
+          "required": ["name", "lang"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "format": "string"
+            },
+            "lang": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        },
+        "notification": {
+          "type": "object",
+          "required": ["type", "message"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "format": "string"
+            },
+            "message": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        },
+        "sendNotification": {
+            "type": "object",
+            "required": ["userIds"],
+            "properties": {
+              "type": {
+                "type": "array"
+              }
+            }
+          }
+      }
+    }
+  }
