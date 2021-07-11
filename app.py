@@ -11,7 +11,6 @@ app = Flask(__name__)
 app.config['MONGODB_SETTINGS'] ={'host': 'mongo', 'port':27017}
 initialize_db(app)
 
-
 ### swagger specific ###
 SWAGGER_URL = '/swagger'
 API_URL = '/static/swagger.json'
@@ -21,16 +20,14 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
     config={'app_name': "Notification"}
 )
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
-    ### end swagger specific ###
+### end swagger specific ###
 
 @app.route("/spec")
 def spec():
-
     swag = swagger(app)
     swag['info']['version'] = "1.0"
     swag['info']['title'] = "My API"
     return jsonify(swag)
-
 
 @app.route('/notifications')
 def list_notification():
@@ -84,7 +81,7 @@ def post_notification():
         return jsonify({'data': notification}), 201
     except BaseException as e:
         print(e)
-        return e.message, 400
+        return e, 400
 
 
 @app.route('/users', methods=['POST'])

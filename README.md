@@ -8,6 +8,8 @@ $ cd app
 
 $ docker-compose up
 
+# RUN TEST CASES
+$ pytest
 ```
 
 Your app should now be running on [localhost:5000](http://localhost:5001/).
